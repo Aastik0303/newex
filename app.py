@@ -1062,10 +1062,17 @@ def page_analytics():
                 marker=dict(size=6,color="#f8637a",
                             line=dict(color="#f8637a",width=2)),
                 hovertemplate="<b>Week of %{x|%d %b}</b><br>₹%{y:,.0f}<extra></extra>",
-            ))
-            fig.update_layout(**PLOTLY_BASE, height=270)
-            st.plotly_chart(fig, use_container_width=True, config={"displayModeBar":False})
-
+            ))# ✅ FIX IT BY SPLITTING THE CALLS:
+            fig = px.pie(df_exp, values='amount', names='category', hole=0.5)
+            
+            # 1. Apply the global styling first
+            fig.update_layout(**PLOTLY_BASE)
+            
+            # 2. Then apply specific overrides for this chart
+            fig.update_layout(
+                showlegend=True,
+                legend=dict(orientation="h", y=-0.2)
+            )
     with c2:
         sec("⚖️ Income vs Expenses")
         fig2 = go.Figure(go.Pie(
